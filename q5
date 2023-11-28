@@ -1,0 +1,42 @@
+#include <stdio.h>
+
+struct Process {
+    int id;
+    int priority;
+    int burst_time;
+};
+
+int main() {
+    int n;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    struct Process processes[n];
+
+    for (int i = 0; i < n; i++) {
+        processes[i].id = i + 1;
+        printf("Enter priority and burst time for Process %d: ", i + 1);
+        scanf("%d %d", &processes[i].priority, &processes[i].burst_time);
+    }
+
+    printf("Process Execution Order:\n");
+
+    for (int i = 0; i < n; i++) {
+        int highest_priority_idx = 0;
+        for (int j = 1; j < n; j++) {
+            if (processes[j].priority < processes[highest_priority_idx].priority) {
+                highest_priority_idx = j;
+            }
+        }
+
+        printf("Executing Process %d (Priority: %d, Burst Time: %d)\n",
+               processes[highest_priority_idx].id, processes[highest_priority_idx].priority, processes[highest_priority_idx].burst_time);
+
+        for (int j = highest_priority_idx; j < n - 1; j++) {
+            processes[j] = processes[j + 1];
+        }
+        n--;
+    }
+
+    return 0;
+}
