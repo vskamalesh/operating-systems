@@ -1,0 +1,56 @@
+#include <stdio.h>
+
+struct Process {
+    int id, arrival_time, burst_time, priority;
+};
+
+int main() {
+    int n;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    struct Process processes[n];
+
+    for (int i = 0; i < n; i++) {
+        processes[i].id = i + 1;
+        printf("Enter arrival time, burst time, and priority for process %d: ", processes[i].id);
+        scanf("%d %d %d", &processes[i].arrival_time, &processes[i].burst_time, &processes[i].priority);
+    }
+
+    int current_time = 0;
+    int total_time = 0;
+
+    for (int i = 0; i < n; i++) {
+        total_time += processes[i].burst_time;
+    }
+
+    printf("Gantt Chart: ");
+
+    while (current_time < total_time) {
+        int highest_priority = 9999; 
+        int selected_process = -1;
+
+        for (int i = 0; i < n; i++) {
+            if (processes[i].arrival_time <= current_time && processes[i].burst_time > 0 && processes[i].priority < highest_priority) {
+                highest_priority = processes[i].priority;
+                selected_process = i;
+            }
+        }
+
+        if (selected_process == -1) {
+            printf("Idle ");
+            current_time++;
+        } else {
+            printf("P%d ", processes[selected_process].id);
+            processes[selected_process].burst_time--;
+            current_time++;
+        }
+    }
+
+    printf("\n\nProcess\tArrival Time\tBurst Time\tPriority\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d\t%d\t\t%d\t\t%d\n", processes[i].id, processes[i].arrival_time, processes[i].burst_time, processes[i].priority);
+    }
+
+    return 0;
+}
