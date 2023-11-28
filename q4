@@ -1,0 +1,39 @@
+#include <stdio.h>
+struct Process {
+    int id;
+    int burst_time;
+};
+int main() {
+    int n;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    struct Process processes[n];
+    int remaining_time[n];
+    for (int i = 0; i < n; i++) {
+        processes[i].id = i + 1;
+        printf("Enter burst time for Process %d: ", i + 1);
+        scanf("%d", &processes[i].burst_time);
+        remaining_time[i] = processes[i].burst_time;
+    }
+    int current_time = 0;
+    printf("\nProcess execution order:\n");
+    while (1) {
+        int smallest = -1;
+        for (int i = 0; i < n; i++) {
+            if (remaining_time[i] > 0) {
+                if (smallest == -1 || remaining_time[i] < remaining_time[smallest]) {
+                    smallest = i;
+                }
+            }
+        }
+        if (smallest == -1) {
+            break; 
+        }
+        printf("Process %d (Burst Time: %d) is executing from time %d to ", processes[smallest].id, processes[smallest].burst_time, current_time);
+        current_time += 1;
+        remaining_time[smallest] -= 1;
+        printf("time %d\n", current_time);
+    }
+    return 0;
+}
